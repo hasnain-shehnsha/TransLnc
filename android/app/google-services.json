@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "461384275970",
+    "project_id": "translync-4755d",
+    "storage_bucket": "translync-4755d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461384275970:android:07b7861ca9f950e1b4ef1b",
+        "android_client_info": {
+          "package_name": "com.example.flutter_projects"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPKaOHGNp0yg8DFiwG6kpm46KWWXl6pyg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
