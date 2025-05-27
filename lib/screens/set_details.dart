@@ -6,7 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'Home.dart';
+import 'navigator.dart';
 
 class SetInfo extends StatefulWidget {
   const SetInfo({super.key});
@@ -68,13 +68,10 @@ class _SetInfoState extends State<SetInfo> {
           print("Photo uploaded: $photoUrl");
         } catch (e) {
           print("Image upload failed: $e");
+          // Don't block the save process if image upload fails
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Image upload failed. Try again.")),
+            const SnackBar(content: Text("Profile picture upload failed. Saving other information...")),
           );
-          setState(() {
-            _isSaving = false;
-          });
-          return;
         }
       }
 
@@ -100,7 +97,7 @@ class _SetInfoState extends State<SetInfo> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => const BottomNavController()),
       );
     } catch (e) {
       print("Error saving user data: $e");
@@ -136,7 +133,7 @@ class _SetInfoState extends State<SetInfo> {
               ),
               const SizedBox(height: 10),
               const Text(
-                "Please provide your name and an optional profile picture",
+                "Please provide your name. You can add a profile picture later in Settings.",
                 style: TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ),
@@ -194,29 +191,53 @@ class _SetInfoState extends State<SetInfo> {
 
               const Spacer(),
 
-              // Save Button
+              // Buttons
               Padding(
                 padding: const EdgeInsets.only(bottom: 20),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 55,
-                  child: ElevatedButton(
-                    onPressed: _isSaving ? null : _saveUserData,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0A66C2),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 55,
+                      child: ElevatedButton(
+                        onPressed: _isSaving ? null : _saveUserData,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF0A66C2),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: _isSaving
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Text(
+                                'Save and Next',
+                                style: TextStyle(color: Colors.white, fontSize: 16),
+                              ),
                       ),
                     ),
-                    child: _isSaving
-                        ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                        : const Text(
-                      'Save and Next',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed: _isSaving ? null : () {
+                        _nameController.text = _nameController.text.trim();
+                        if (_nameController.text.isNotEmpty) {
+                          _saveUserData();
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Please enter your name")),
+                          );
+                        }
+                      },
+                      child: const Text(
+                        'Skip profile picture for now',
+                        style: TextStyle(
+                          color: Color(0xFF0A66C2),
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ],

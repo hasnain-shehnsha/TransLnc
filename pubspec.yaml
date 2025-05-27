@@ -41,6 +41,8 @@ dependencies:
   cloud_firestore: ^4.15.4
   firebase_storage: ^11.6.4
   image_picker: ^1.0.7
+  contacts_service: ^0.6.3
+  permission_handler: ^11.0.0
 
 
 
